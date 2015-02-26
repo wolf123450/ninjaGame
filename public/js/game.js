@@ -32,7 +32,8 @@ function init() {
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
-	socket = io.connect("http://ta-9.cs.byu.edu:8000", { port: 8000, transports: ["websocket"]});
+	console.log(document.domain);
+	socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
 	// Start listening for events
 	setEventHandlers();
 
