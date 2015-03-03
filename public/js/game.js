@@ -6,6 +6,8 @@ var canvas,			// Canvas DOM element
 	keys,			// Keyboard input
 	localPlayer,    // Local player
 	remotePlayers,
+	cameraX,
+	cameraY,
 	socket;	
 
 
@@ -38,6 +40,8 @@ function init() {
 	setEventHandlers();
 
 	remotePlayers = [];
+	cameraX = 0;
+	cameraY = 0;
 	
 };
 
@@ -82,7 +86,7 @@ function onResize(e) {
 
 function onSocketConnected() {
     console.log("Connected to socket server");
-    socket.emit("new player", {x: localPlayer.getX(), y: localPlayer.getY()});
+    socket.emit("new player", localPlayer.getJson());
 };
 
 function onSocketDisconnect() {
@@ -141,8 +145,7 @@ function animate() {
 **************************************************/
 function update() {
 	if (localPlayer.update(keys)) {
-	    socket.emit("move player", {x: localPlayer.getX(), y: localPlayer.getY(), 
-	    	dir: localPlayer.getDir(), armAngle: localPlayer.getArmAngle() });
+	    socket.emit("move player", localPlayer.getJson());
 	};
 };
 
@@ -154,12 +157,25 @@ function draw() {
 	// Wipe the canvas clean
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+
+
+	ctx.save();
+	cameraX = canvas.width/2 - localPlayer.getX();
+	cameraY = canvas.height/2 - localPlayer.getY();
+	ctx.translate(cameraX, cameraY);
+	
+	ctx.textAlign = "center";
+	ctx.textBaseline = "bottom";
+	ctx.font = "20px serif";
+    ctx.strokeText("You", localPlayer.getX(), localPlayer.getY()-5);
+	
 	// Draw the local player
 	localPlayer.draw(ctx);
 	var i;
 	for (i = 0; i < remotePlayers.length; i++) {
 	    remotePlayers[i].draw(ctx);
 	};
+	ctx.restore();
 };
 
 function playerById(id) {
