@@ -10,6 +10,10 @@ var Player = function(startX, startY) {
 		direction = 1,
 		moveAmount = 2;
 
+    var getJson = function() {
+        return {id:id, x:x, y:y, armAngle:armAngle, dir:direction};
+    };
+
 		var getX = function() {
 		    return x;
 		};
@@ -114,6 +118,7 @@ var Player = function(startX, startY) {
     }
 
 	return {
+	    getJson:getJson,
 		getX: getX,
 		getY: getY,
 		setX: setX,
