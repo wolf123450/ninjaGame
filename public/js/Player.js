@@ -8,7 +8,13 @@ var Player = function(startX, startY) {
 		armAngle = 0,
 		armSpeed = 8,
 		direction = 1,
-		moveAmount = 2;
+		moveAmount = 5,
+        yVel=0,
+        maxYVel = 20;
+        gravity = 1,
+        jumpVel = 20,
+        width = 26,
+        height = 40;
 
     var getJson = function() {
         return {id:id, x:x, y:y, armAngle:armAngle, dir:direction};
@@ -43,26 +49,45 @@ var Player = function(startX, startY) {
 			armAngle = newArmAngle;
 		};
 
-	var update = function(keys) {
+	var update = function(keys, level) {
+
+        if (y > 800){
+            x = Math.round(Math.random()*50),
+            y = Math.round(Math.random()*20);
+            yVel = 0;
+            return true;
+        }
+
 		var prevX = x,
 			prevY = y,
 			prevArmAngle = armAngle,
 			prevDir = direction;
 
-		// Up key takes priority over down
-		if (keys.up) {
-			y -= moveAmount;
-		} else if (keys.down) {
-			y += moveAmount;
-		};
+		if (keys.up && level.checkCollision(x,y+1, width,height)) {
+			yVel -= jumpVel;
+		} 
+        
+        y += yVel
+        if (level.checkCollision(x,y,width,height)){
+            y -= yVel;
+            yVel = 0;
+        } else if (yVel < maxYVel){
+            yVel += gravity;
+        }
 
 		// Left key takes priority over right
 		if (keys.left) {
 			x -= moveAmount;
 			direction = -1;
+            if (level.checkCollision(x,y,width,height)){
+                x += moveAmount;
+            }
 		} else if (keys.right) {
 			x += moveAmount;
 			direction = 1;
+            if (level.checkCollision(x,y,width,height)){
+                x -= moveAmount;
+            }
 		};
 
 		if (armAngle > 10) {
@@ -92,19 +117,19 @@ var Player = function(startX, startY) {
         ctx.translate(x,y);
         ctx.scale(dir, 1);
         ctx.fillStyle = "rgb(86, 86, 86)"; //Body
-        ctx.fillRect(-13, 0, 26, 40);
+        ctx.fillRect(-width/2, -height/2, width, height);
 
         ctx.fillStyle = "tan"; //Face
-        ctx.fillRect (2, 7, 10, 10);
+        ctx.fillRect (2, 7-height/2, 10, 10);
 
         ctx.fillStyle = "blue"; //Eye
-        ctx.fillRect(7, 10, 3, 3);
+        ctx.fillRect(7, 10-height/2, 3, 3);
 
         ctx.fillStyle = "black"; //belt
-        ctx.fillRect(-13, 25, 26, 5);
+        ctx.fillRect(-13, 25-height/2, 26, 5);
 
         ctx.save();
-        ctx.translate(2, 25);
+        ctx.translate(2, 25-height/2);
         ctx.rotate((Math.PI/180) * armDeg);
         ctx.fillStyle = "rgb(86, 86, 86)"; //arm
         ctx.fillRect(-5, -5, 18, 10);

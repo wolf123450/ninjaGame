@@ -1,18 +1,42 @@
 // Placeholder file for Node.js game server
+var http = require('http');
 var util = require("util");
-var io = require("socket.io")();
+var io = require("socket.io");
 var Player = require("./Player").Player;
+var fs = require('fs');
+var url = require('url');
 
+var ROOT_DIR = "public/";
 var socket;
 var players;
 
+
+
 function init(){
+    var app = http.createServer(handler);
     players = [];
-    socket = io.listen(8000);
-    socket.set("transports", ["websocket"]);
+    socket = io(app);
+    //socket.set("transports", ["websocket"]);
     //socket.set("secure", "true");
+    app.listen(80);
 
 	setEventHandlers();
+};
+
+function handler (request, response){
+    var urlObj = url.parse(request.url, true, false);
+    var filePath = "index.html";
+    if (urlObj.pathname != "/"){
+        filePath = urlObj.pathname;
+    }
+    fs.readFile(ROOT_DIR + filePath, function(err, data) {
+        if (err) {
+            response.writeHead(500);
+            return response.end('Error loading index.html');
+        }
+        response.writeHead(200);
+        response.end(data);
+    });
 };
 
 function setEventHandlers(){
