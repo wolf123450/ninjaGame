@@ -4,11 +4,12 @@
 var canvas,			// Canvas DOM element
 	ctx,			// Canvas rendering context
 	keys,			// Keyboard input
+	level,
 	localPlayer,    // Local player
 	remotePlayers,
 	cameraX,
 	cameraY,
-	socket;	
+	socket;
 
 
 /**************************************************
@@ -29,13 +30,16 @@ function init() {
 	// Calculate a random start position for the local player
 	// The minus 5 (half a player size) stops the player being
 	// placed right on the egde of the screen
-	var startX = Math.round(Math.random()*(canvas.width-5)),
-		startY = Math.round(Math.random()*(canvas.height-5));
+	var startX = Math.round(Math.random()*50),
+		startY = Math.round(Math.random()*20);
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
+	level = new Level();
+	level.addObject(0, 200, 800, 50);
 	console.log(document.domain);
-	socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
+	// socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
+	socket = io("http://"+document.domain);
 	// Start listening for events
 	setEventHandlers();
 
@@ -144,7 +148,7 @@ function animate() {
 ** GAME UPDATE
 **************************************************/
 function update() {
-	if (localPlayer.update(keys)) {
+	if (localPlayer.update(keys, level)) {
 	    socket.emit("move player", localPlayer.getJson());
 	};
 };
@@ -157,17 +161,22 @@ function draw() {
 	// Wipe the canvas clean
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+	
 
-
+	//draw players
 	ctx.save();
 	cameraX = canvas.width/2 - localPlayer.getX();
 	cameraY = canvas.height/2 - localPlayer.getY();
 	ctx.translate(cameraX, cameraY);
+
+	//draw the level
+	level.draw(ctx);
 	
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
 	ctx.font = "20px serif";
-    ctx.strokeText("You", localPlayer.getX(), localPlayer.getY()-5);
+	var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
+  	ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
 	
 	// Draw the local player
 	localPlayer.draw(ctx);
