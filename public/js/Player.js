@@ -69,8 +69,15 @@ var Player = function(startX, startY) {
         
         y += yVel
         if (level.checkCollision(x,y,width,height)){
-            y -= yVel;
-            yVel = 0;
+            if (yVel > 0){
+                y = level.getLast().y - level.getLast().height/2-height/2;
+                yVel = 0;
+            } else if (yVel < 0){
+                y = level.getLast().y + level.getLast().height/2+height/2;
+                yVel = 0;
+            }
+           //y -= yVel;
+            
         } else if (yVel < maxYVel){
             yVel += gravity;
         }
@@ -80,13 +87,16 @@ var Player = function(startX, startY) {
 			x -= moveAmount;
 			direction = -1;
             if (level.checkCollision(x,y,width,height)){
-                x += moveAmount;
+                // x += moveAmount;
+                x = level.getLast().x + level.getLast().width/2+width/2;
             }
 		} else if (keys.right) {
 			x += moveAmount;
 			direction = 1;
             if (level.checkCollision(x,y,width,height)){
-                x -= moveAmount;
+                // x -= moveAmount;
+                x = level.getLast().x - level.getLast().width/2-width/2;
+                
             }
 		};
 

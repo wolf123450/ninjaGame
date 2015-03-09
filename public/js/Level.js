@@ -3,6 +3,7 @@
 **************************************************/
 var Level = function() {
 	var objects = [];
+  var lastHit;
 	
   var getJson = function() {
     return {id:id, x:x, y:y, armAngle:armAngle, dir:direction};
@@ -19,6 +20,10 @@ var Level = function() {
     return objects;
   };
 
+  var getLast = function(){
+    return lastHit;
+  }
+
   var draw = function(ctx){
     ctx.save();
     ctx.fillStyle = "red";
@@ -29,13 +34,15 @@ var Level = function() {
   }
 
   var checkCollision = function(x,y,width,height){
-    var overlap = true;
+    var overlap;
     for (i in objects){
+      overlap = true;
       overlap = overlap && objects[i].x + objects[i].width/2 > x - width/2;
       overlap = overlap && objects[i].x - objects[i].width/2 < x + width/2;
       overlap = overlap && objects[i].y + objects[i].height/2 > y - height/2;
       overlap = overlap && objects[i].y - objects[i].height/2 < y + height/2;
       if (overlap){
+        lastHit = objects[i];
         return overlap;
       }
     }
@@ -48,6 +55,7 @@ var Level = function() {
     addObject:addObject,
     getObjects:getObjects,
     draw:draw,
-    checkCollision:checkCollision
+    checkCollision:checkCollision,
+    getLast:getLast
 	}
 };

@@ -37,6 +37,8 @@ function init() {
 	localPlayer = new Player(startX, startY);
 	level = new Level();
 	level.addObject(0, 200, 800, 50);
+    level.addObject(-200, 100, 200, 20);
+    level.addObject(200, 100, 200, 20);
 	console.log(document.domain);
 	// socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
 	socket = io("http://"+document.domain);
