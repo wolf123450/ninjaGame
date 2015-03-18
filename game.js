@@ -68,13 +68,17 @@ function onClientDisconnect() {
 };
 
 function onNewPlayer(data) {
+  // console.log(data);
 	var newPlayer = new Player(data.x, data.y);
-	newPlayer.id = this.id;
-	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+	newPlayer.setId(this.id);
+	newPlayer.setColor(data.color);
+	this.broadcast.emit("new player", newPlayer.getJson());
+	// console.log(newPlayer);
     var i, existingPlayer;
     for (i = 0; i < players.length; i++) {
         existingPlayer = players[i];
-        this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+        // console.log(i + existingPlayer.getColor());
+        this.emit("new player", existingPlayer.getJson());
     };
 	players.push(newPlayer);
 };
@@ -94,15 +98,14 @@ function onMovePlayer(data) {
     movePlayer.setDir(data.dir);
     movePlayer.setArmAngle(data.armAngle);
 
-    this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY(),
-        dir: movePlayer.getDir(), armAngle: movePlayer.getArmAngle() });
+    this.broadcast.emit("move player", movePlayer.getJson());
 };
 
 
 function playerById(id) {
     var i;
     for (i=0; i < players.length; i++){
-        if (players[i].id == id)
+        if (players[i].getId() == id)
             return players[i];
     };
 

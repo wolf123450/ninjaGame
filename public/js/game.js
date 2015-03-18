@@ -35,6 +35,7 @@ function init() {
 
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
+    localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
 	level = new Level();
 	level.addObject(0, 200, 800, 50);
     level.addObject(-200, 100, 200, 20);
@@ -102,9 +103,11 @@ function onSocketDisconnect() {
 
 function onNewPlayer(data) {
     console.log("New player connected: "+data.id);
+    console.log(data);
     //remotePlayers = [];
     var newPlayer = new Player(data.x, data.y);
     newPlayer.id = data.id;
+    newPlayer.setColor( data.color);
     remotePlayers.push(newPlayer);
 };
 
@@ -182,6 +185,7 @@ function draw() {
 	
 	// Draw the local player
 	localPlayer.draw(ctx);
+	// console.log(localPlayer.getColor());
 	var i;
 	for (i = 0; i < remotePlayers.length; i++) {
 	    remotePlayers[i].draw(ctx);

@@ -5,19 +5,20 @@ var Player = function(startX, startY) {
 	var x = startX,
 		y = startY,
 		id,
+        color,
 		armAngle = 0,
 		armSpeed = 8,
 		direction = 1,
 		moveAmount = 5,
-        yVel=0,
-        maxYVel = 20;
-        gravity = 1,
-        jumpVel = 20,
-        width = 26,
-        height = 40;
+    yVel=0,
+    maxYVel = 20;
+    gravity = 1,
+    jumpVel = 20,
+    width = 26,
+    height = 40;
 
     var getJson = function() {
-        return {id:id, x:x, y:y, armAngle:armAngle, dir:direction};
+        return {id:id, x:x, y:y, armAngle:armAngle, dir:direction, color:color};
     };
 
 		var getX = function() {
@@ -48,7 +49,16 @@ var Player = function(startX, startY) {
 		var setArmAngle = function(newArmAngle){
 			armAngle = newArmAngle;
 		};
+		var setColor = function(newColor){
+		  console.log(newColor);
+	    color = newColor;	
+		};
 
+    var getColor = function(){
+      return color;
+    };
+    
+    
 	var update = function(keys, level) {
 
         if (y > 800){
@@ -126,7 +136,7 @@ var Player = function(startX, startY) {
         
         ctx.translate(x,y);
         ctx.scale(dir, 1);
-        ctx.fillStyle = "rgb(86, 86, 86)"; //Body
+        ctx.fillStyle = color; //Body
         ctx.fillRect(-width/2, -height/2, width, height);
 
         ctx.fillStyle = "tan"; //Face
@@ -141,7 +151,7 @@ var Player = function(startX, startY) {
         ctx.save();
         ctx.translate(2, 25-height/2);
         ctx.rotate((Math.PI/180) * armDeg);
-        ctx.fillStyle = "rgb(86, 86, 86)"; //arm
+        ctx.fillStyle = color; //arm
         ctx.fillRect(-5, -5, 18, 10);
         ctx.strokeStyle= "black";
         ctx.strokeRect(-5,-5, 18, 10);
@@ -153,7 +163,7 @@ var Player = function(startX, startY) {
     }
 
 	return {
-	    getJson:getJson,
+	  getJson:getJson,
 		getX: getX,
 		getY: getY,
 		setX: setX,
@@ -163,6 +173,8 @@ var Player = function(startX, startY) {
 		setDir: setDir,
 		setArmAngle: setArmAngle,
 		update: update,
+		setColor: setColor,
+		getColor: getColor,
 		draw: draw
 	}
 };
