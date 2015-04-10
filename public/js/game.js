@@ -36,6 +36,8 @@ function init() {
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
+	localPlayer.setDeaths(0);
+
 	level = new Level();
 	level.addObject(0, 200, 800, 50);
     level.addObject(-200, 100, 200, 20);
@@ -68,6 +70,7 @@ var setEventHandlers = function() {
 	socket.on("new player", onNewPlayer);
 	socket.on("move player", onMovePlayer);
 	socket.on("remove player", onRemovePlayer);
+	socket.on("hit player", onHitPlayer);
 };
 
 // Keyboard key down
@@ -93,12 +96,13 @@ function onResize(e) {
 
 function onSocketConnected() {
     console.log("Connected to socket server");
+    localPlayer.setId(this.id);
     socket.emit("new player", localPlayer.getJson());
 };
 
 function onSocketDisconnect() {
     console.log("Disconnected from socket server");
-    socket.emit("remove player", {id: localPlayer.id});
+    socket.emit("remove player", {id: localPlayer.getId()});
 };
 
 function onNewPlayer(data) {
@@ -106,8 +110,9 @@ function onNewPlayer(data) {
     console.log(data);
     //remotePlayers = [];
     var newPlayer = new Player(data.x, data.y);
-    newPlayer.id = data.id;
+    newPlayer.setId(data.id);
     newPlayer.setColor( data.color);
+    newPlayer.setDeaths(data.deaths);
     remotePlayers.push(newPlayer);
 };
 
@@ -123,17 +128,25 @@ function onMovePlayer(data) {
 	movePlayer.setY(data.y);
 	movePlayer.setDir(data.dir);
 	movePlayer.setArmAngle(data.armAngle);
+	movePlayer.setDeaths(data.deaths);
 };
 
 function onRemovePlayer(data) {
 	var removePlayer = playerById(data.id);
 	console.log("remove player");
 	if (!removePlayer){
-		util.log("Player not found: " + data.id);
+		console.log("Player not found: " + data.id);
 		return;
 	};
 
 	remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
+};
+
+function onHitPlayer(data) {
+	if (data.id == localPlayer.getId()){
+		localPlayer.hit(data.dir);
+	}
+	//console.log(data);
 };
 
 
@@ -153,7 +166,7 @@ function animate() {
 ** GAME UPDATE
 **************************************************/
 function update() {
-	if (localPlayer.update(keys, level)) {
+	if (localPlayer.update(keys, level, remotePlayers)) {
 	    socket.emit("move player", localPlayer.getJson());
 	};
 };
@@ -166,11 +179,23 @@ function draw() {
 	// Wipe the canvas clean
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	
 
-	//draw players
+	//deaths
 	ctx.save();
-	cameraX = canvas.width/2 - localPlayer.getX();
+	ctx.strokeStyle = localPlayer.getColor();
+	ctx.font = "20px serif";
+	ctx.strokeText(localPlayer.getDeaths(), 30,25);
+	
+	for (i in remotePlayers){
+		ctx.strokeStyle = remotePlayers[i].getColor();
+		ctx.strokeText(remotePlayers[i].getDeaths(), 30 + (Number(i)+1)*30,25);
+		//console.log(Number(i)+1);
+	}
+
+	ctx.restore();
+	
+	ctx.save();
+	cameraX = canvas.width/2 - localPlayer.getX(); //Center on player
 	cameraY = canvas.height/2 - localPlayer.getY();
 	ctx.translate(cameraX, cameraY);
 
@@ -182,12 +207,14 @@ function draw() {
 	ctx.font = "20px serif";
 	var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
   	ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
+  	
 	
 	// Draw the local player
 	localPlayer.draw(ctx);
 	// console.log(localPlayer.getColor());
+	//draw players
 	var i;
-	for (i = 0; i < remotePlayers.length; i++) {
+	for (i in remotePlayers) {
 	    remotePlayers[i].draw(ctx);
 	};
 	ctx.restore();
@@ -196,7 +223,7 @@ function draw() {
 function playerById(id) {
     var i;
     for (i=0; i < remotePlayers.length; i++){
-        if (remotePlayers[i].id == id)
+        if (remotePlayers[i].getId() === id)
             return remotePlayers[i];
     };
 
