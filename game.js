@@ -1,10 +1,15 @@
 // Placeholder file for Node.js game server
-var http = require('http');
+//var http = require('http');
 var util = require("util");
-var io = require("socket.io");
+//var io = require("socket.io");
 var Player = require("./Player").Player;
 var fs = require('fs');
 var url = require('url');
+
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var ROOT_DIR = "public/";
 var socket;
@@ -13,14 +18,23 @@ var players;
 
 
 function init(){
-    var app = http.createServer(handler);
+    //var app = http.createServer(handler);
     players = [];
-    socket = io(app);
+    //socket = io(app);
     //socket.set("transports", ["websocket"]);
     //socket.set("secure", "true");
-    app.listen(80);
+    //app.listen(80);
+    server.listen(80);
+    app.use('/', express.static('./'+ROOT_DIR, {maxAge: 60*60*1000}));
+    //app.get('/', handler);
+    app.get('/', function( req, res){
+      res.sendfile(ROOT_DIR + 'index.html');
+    });
+	  setEventHandlers();
+};
 
-	setEventHandlers();
+function routes(){
+  
 };
 
 function handler (request, response){
@@ -40,22 +54,29 @@ function handler (request, response){
 };
 
 function setEventHandlers(){
-	socket.sockets.on("connection", onSocketConnection);
+	//socket.sockets.on("connection", onSocketConnection);
+	io.on('connection', onSocketConnection);
 };
 
 function onSocketConnection(client) {
-    //console.log("New player has connected: " + client.id);
+  //console.log("New player has connected: " + client.id);
 	util.log("New player has connected: " + client.id);
+  //util.log(JSON.stringify(client.request.headers));
+  for ( i in client.request){
+    //util.log(i);
+    //util.log(client.request[i]);
+  }
+  
 
 	client.on("disconnect", onClientDisconnect);
 	client.on("new player", onNewPlayer);
 	client.on("move player", onMovePlayer);
-    client.on("hit player", onHitPlayer);
+  client.on("hit player", onHitPlayer);
 };
 
 function onClientDisconnect() {
     // When a player disconnects, remove it.
-	util.log("Player has disconnected: " + this.id);
+	  util.log("Player has disconnected: " + this.id);
     var removePlayer = playerById(this.id);
     if (!removePlayer){
         util.log("Player not found: " + this.id);
