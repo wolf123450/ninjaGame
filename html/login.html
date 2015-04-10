@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<link href="login.css" rel="stylesheet" type="text/css">
+
+<script src="http://code.angularjs.org/1.2.13/angular.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+<script src="app.js"></script>
+</head>
+
+<body ng-app="routerApp">
+
+<div id="pageHeading">
+<h1><big><big><i>NINJA BRAWL</i></big></big></h1>
+
+<div id="pageContent">
+<ui-view></ui-view>
+<script type="text/ng-template" id="/login.html">
+
+  <div id="existing">
+    <h2>LOGIN</h2>
+    <form id="loginform">
+<p>Username<br><input id="username" type="text" class="resizedTextbox" /></p>
+    <p>Password<br><input id="password" type="text" class="resizedTextbox" /></p>
+    <input id="loginbtn" type="submit" value="Login" class="resizedButton" />
+    </form>
+  </div>
+
+  <div id="newuser">
+    <h2>NEW USER</h2>
+    <form id="createuserform" action="#/securityQ">
+    <p>Enter a username<br><input id="newname" type="text" class="resizedTextbox" /></p>
+    <p>Enter a password<br><input id="newpass" type="text" class="resizedTextbox" /></p>
+    <p>Re-enter your password<br><input id="reenter" type"text" class="resizedTextbox" /></p>
+    <input id="creatbtn" type="submit" value="Create" class="resizedButton" />
+  </div>
+</script>
+
+<script type="text/ng-template" id="/securityQ.html">
+  <div id="question">
+    <h2>Security question</h2>
+    <p>Enter a security question so you can recover your password</p>
+    <p>Question<br><input id="question" type="text" class="resizedTextbox" /></p>
+    <p>Answer<br><input id="answer" type="text" class="resizedTextbox" /></p>
+    <input id="qsubmit" type="submit" value="Submit" class="resizedButton" />
+  </div>
+</script>
+</div>
+</body>
+
+</html>
+

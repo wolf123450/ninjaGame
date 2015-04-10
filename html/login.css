@@ -1,0 +1,44 @@
+body {
+	text-align: center;
+	background-color: white;
+	background: url("background.jpg") no-repeat center top;
+	margin: 5px 10px;
+}
+
+#pageContent {
+	margin-top: 5px;
+	position: relative;
+}
+
+#pageContent h1 { font-size: 40pt; }
+
+#pageContent h2 { font-size: 28pt; }
+
+#pageContent p { font-size: 18pt; }
+
+#existing {
+	width: 40%;
+	position: absolute;
+	left: 8%;
+}
+
+#newuser {
+	width: 40%;
+	position: absolute;
+	right: 8%;
+}
+
+.resizedTextbox {
+	width: 200px;
+	height: 20px;
+}
+
+.resizedButton {
+	width: 120px;
+	height: 30px;
+	font-size: 14pt;
+	border-color: rgb(0,0,200);
+	background-color: rgb(0,50,255);
+	color: white;
+}
+
