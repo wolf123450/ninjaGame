@@ -50,6 +50,7 @@ function onSocketConnection(client) {
 	client.on("disconnect", onClientDisconnect);
 	client.on("new player", onNewPlayer);
 	client.on("move player", onMovePlayer);
+    client.on("hit player", onHitPlayer);
 };
 
 function onClientDisconnect() {
@@ -72,6 +73,7 @@ function onNewPlayer(data) {
 	var newPlayer = new Player(data.x, data.y);
 	newPlayer.setId(this.id);
 	newPlayer.setColor(data.color);
+    newPlayer.setDeaths(data.deaths);
 	this.broadcast.emit("new player", newPlayer.getJson());
 	// console.log(newPlayer);
     var i, existingPlayer;
@@ -97,8 +99,15 @@ function onMovePlayer(data) {
     movePlayer.setY(data.y);
     movePlayer.setDir(data.dir);
     movePlayer.setArmAngle(data.armAngle);
+    movePlayer.setDeaths(data.deaths);
 
     this.broadcast.emit("move player", movePlayer.getJson());
+};
+
+function onHitPlayer(data){
+    // console.log(this.id);
+    // console.log(data);
+    this.broadcast.emit("hit player", data);
 };
 
 

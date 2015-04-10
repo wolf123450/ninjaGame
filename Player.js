@@ -4,11 +4,12 @@ var Player = function(startX, startY) {
 		direction,
 		id,
 		color,
-		armAngle;
+		armAngle,
+		deaths;
 
   var getJson= function(){
     // console.log("id:" +id);
-    return {x:x,y:y,id:id,color:color,armAngle:armAngle,dir:direction};
+    return {x:x,y:y,id:id,color:color,armAngle:armAngle,dir:direction,deaths:deaths};
   };
   
 	var getX = function() {
@@ -53,21 +54,31 @@ var Player = function(startX, startY) {
 		armAngle = newArmAngle;
 	};
 
-	return {
-		getX: getX,
-		getY: getY,
-		setX: setX,
-		setY: setY,
-		setColor:setColor,
-		getColor:getColor,
-		getDir: getDir,
-		getArmAngle: getArmAngle,
-		setDir: setDir,
-		setArmAngle: setArmAngle,
-		setId: setId,
-	  getId: getId,	
-		getJson:getJson
-	}
-};
+	var getDeaths = function(){
+        return deaths;
+    };
 
-exports.Player = Player;
+    var setDeaths = function(newDeaths){
+        deaths = newDeaths;
+    };
+
+		return {
+			getX: getX,
+			getY: getY,
+			setX: setX,
+			setY: setY,
+			setColor:setColor,
+			getColor:getColor,
+			getDir: getDir,
+			getArmAngle: getArmAngle,
+			setDir: setDir,
+			setArmAngle: setArmAngle,
+			setId: setId,
+			getId: getId,
+			getDeaths:getDeaths,
+        	setDeaths:setDeaths,	
+			getJson:getJson
+		}
+	};
+
+		exports.Player = Player;
