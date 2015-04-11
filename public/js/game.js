@@ -37,7 +37,7 @@ function init() {
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
 	localPlayer.setDeaths(0);
-
+  localPlayer.setCharacter("cowboy");
 	level = new Level();
 	level.addObject(0, 200, 800, 50);
     level.addObject(-200, 100, 200, 20);
