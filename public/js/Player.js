@@ -20,6 +20,8 @@ var Player = function(startX, startY) {
         height = 40,
         armWidth = 10,
         armHeight = 18;
+        doubleJump = false;
+        timeout = new Date();
 
     var getJson = function() {
         return {id:id, x:x, y:y, armAngle:armAngle, dir:direction, color:color, deaths:deaths};
@@ -96,13 +98,26 @@ var Player = function(startX, startY) {
             prevY = y,
             prevArmAngle = armAngle,
             prevDir = direction;
+        
+        time = new Date();
+
 
         if (keys.up && level.checkCollision(x,y+1, width,height)) {
             //console.log("before: " + yVel);
             //yVel = -jumpVel; // no superjump, and no buggy half bounce.
             yVel -= jumpVel;  // superjump.
             //console.log("after:" + yVel);
-        } 
+            doubleJump = true;
+            timeout = new Date();
+            // double jump if in air and havent double jumped
+        } else if (keys.up && doubleJump && time.getTime() - timeout.getTime() > 150){
+          
+          console.log(timeout.getTime());
+          yVel = -jumpVel*3/4;
+          doubleJump = false;
+          timeout = time;
+          //double jump
+        }
 
 
         // Left key takes priority over right
