@@ -81,6 +81,10 @@ var Player = function(startX, startY) {
     var getColor = function(){
         return color;
     };
+    
+    var getDamage = function(){
+    return damage-1;
+    };
 
     var getDeaths = function(){
         return deaths;
@@ -326,6 +330,7 @@ function cowboy( x, y, armDeg, dir){
         setColor: setColor,
         getColor: getColor,
         hit:hit,
+        getDamage:getDamage,
         getDeaths:getDeaths,
         setDeaths:setDeaths,
         draw: draw
