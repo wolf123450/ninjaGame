@@ -37,7 +37,7 @@ function init() {
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
 	localPlayer.setDeaths(0);
-
+  localPlayer.setCharacter("cowboy");
 	level = new Level();
 	level.addObject(0, 200, 800, 50,"red");
 	level.addObject(1100,200,800,50,"black");
@@ -219,8 +219,11 @@ function draw() {
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
 	ctx.font = "20px serif";
-	var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
-  	ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
+	//ctx.strokeStyle = "red";
+	//var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
+	var message = Math.floor(localPlayer.getDamage()*100);
+	ctx.strokeStyle = "rgb("+(message+150)+","+(200-message)+",0)";
+  ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
   	
 	
 	// Draw the local player
