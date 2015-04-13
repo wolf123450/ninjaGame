@@ -7,6 +7,7 @@ var Player = function(startX, startY) {
         id,
         color,
         deaths,
+        character,
         armAngle = 0,
         armSpeed = 10,
         direction = 1,
@@ -20,6 +21,9 @@ var Player = function(startX, startY) {
         height = 40,
         armWidth = 10,
         armHeight = 18;
+        doubleJump = false;
+        timeout = new Date();
+        damage = 1;
 
     var getJson = function() {
         return {id:id, x:x, y:y, armAngle:armAngle, dir:direction, color:color, deaths:deaths};
@@ -35,6 +39,14 @@ var Player = function(startX, startY) {
 
     var getId = function() {
         return id;
+    };
+    
+    var getCharacter = function() {
+        return character;
+    };
+    
+    var setCharacter = function(newChar) {
+        character = newChar;
     };
 
     var setId = function(newId){
@@ -69,6 +81,10 @@ var Player = function(startX, startY) {
     var getColor = function(){
         return color;
     };
+    
+    var getDamage = function(){
+    return damage-1;
+    };
 
     var getDeaths = function(){
         return deaths;
@@ -79,7 +95,8 @@ var Player = function(startX, startY) {
     };
     
     var hit = function (dir){
-        xVel = dir*15;
+        xVel = Math.floor(dir*15*damage);
+        damage += 0.01;
     }
     
     var update = function(keys, level, players) {
@@ -89,6 +106,7 @@ var Player = function(startX, startY) {
             y = Math.round(Math.random()*20);
             yVel = 0;
             deaths++;
+            damage = 1;
             return true;
         }
 
@@ -96,13 +114,26 @@ var Player = function(startX, startY) {
             prevY = y,
             prevArmAngle = armAngle,
             prevDir = direction;
+        
+        time = new Date();
+
 
         if (keys.up && level.checkCollision(x,y+1, width,height)) {
             //console.log("before: " + yVel);
             //yVel = -jumpVel; // no superjump, and no buggy half bounce.
             yVel -= jumpVel;  // superjump.
             //console.log("after:" + yVel);
-        } 
+            doubleJump = true;
+            timeout = new Date();
+            // double jump if in air and havent double jumped
+        } else if (keys.up && doubleJump && time.getTime() - timeout.getTime() > 150){
+          
+          console.log(timeout.getTime());
+          yVel = -jumpVel;//*3/4;
+          doubleJump = false;
+          timeout = time;
+          //double jump
+        }
 
 
         // Left key takes priority over right
@@ -147,6 +178,9 @@ var Player = function(startX, startY) {
             }
             xVel -= 1; //Drag
         };
+        if (Math.abs(xVel) < 1){
+          xVel = 0;
+        }
 
 
 
@@ -184,7 +218,11 @@ var Player = function(startX, startY) {
 
         var draw = function(ctx) {
             //ctx.fillRect(x-5, y-5, 10, 10);
-            ninja(x,y, armAngle, direction);
+            if (character === "cowboy"){
+              cowboy(x,y,armAngle,direction);
+            } else {
+              ninja(x,y, armAngle, direction);
+            }
         };
 
     function ninja( x, y, armDeg, dir){
@@ -219,12 +257,69 @@ var Player = function(startX, startY) {
         ctx.restore();
     }
 
+    var brown = "rgb(139,69,19)";
+    var silver = "rgb(192,192,192)";
+
+function cowboy( x, y, armDeg, dir){
+        ctx.save();
+        //ctx.clearRect(0,0,canvas.width, canvas.height);
+        
+        ctx.translate(x,y);
+        ctx.scale(dir, 1);
+        ctx.fillStyle = brown; //Body
+        ctx.fillRect(-width/2, -height/2, width, height);
+
+        ctx.fillStyle = "tan"; //Face
+        ctx.fillRect (-13, 7-height/2, 26, 13);
+
+        ctx.fillStyle = "blue"; //Eye
+        ctx.fillRect(7, 10-height/2, 3, 3);
+        
+        ctx.fillStyle = "black"; //Mouth frown
+        ctx.fillRect(8, 16-height/2, 5, 1);
+        ctx.fillRect(7, 17-height/2, 1, 1);
+        ctx.fillRect(6, 18-height/2, 1, 1);
+
+        ctx.fillStyle = color; //Shirt
+        ctx.fillRect(-13, 19-height/2, 26, 13);
+        
+        ctx.fillStyle = brown; //Hat/brim
+        ctx.fillRect(-20, 7-height/2, 40, 2);
+        //left curl
+        ctx.fillRect(-21, 6-height/2, 2, 2);
+        ctx.fillRect(-22, 5-height/2, 2, 2);
+        //right curl
+        ctx.fillRect(19, 6-height/2, 2, 2);
+        ctx.fillRect(20, 5-height/2, 2, 2);
+        //top
+        ctx.fillRect(1-width/2, -2-height/2, width-2, 2);
+        ctx.fillRect(2-width/2, -4-height/2, width-4, 2);
+        ctx.fillRect(3-width/2, -6-height/2, width-6, 2);
+
+        ctx.save();
+        ctx.translate(2, 25-height/2);
+        ctx.rotate((Math.PI/180) * armDeg);
+        ctx.fillStyle = color; //arm
+        ctx.fillRect(-5, -5, 18, 10);
+        ctx.strokeStyle= "black";
+        ctx.strokeRect(-5,-5, 18, 10);
+        ctx.fillStyle = "tan"; //Hand/gun
+        ctx.fillRect (14, -4, 5, 9); //ctx.fillRect (14, -4, 5, 8);
+        ctx.fillStyle = silver; //gun
+        ctx.fillRect (14, -4, 9, 4);
+        ctx.restore();
+
+        ctx.restore();
+    }
+
     return {
         getJson:getJson,
         getX: getX,
         getY: getY,
         setX: setX,
         setY: setY,
+        getCharacter: getCharacter,
+        setCharacter: setCharacter,
         getId:getId,
         setId:setId,
         getDir: getDir,
@@ -235,6 +330,7 @@ var Player = function(startX, startY) {
         setColor: setColor,
         getColor: getColor,
         hit:hit,
+        getDamage:getDamage,
         getDeaths:getDeaths,
         setDeaths:setDeaths,
         draw: draw

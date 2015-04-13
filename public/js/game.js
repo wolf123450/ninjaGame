@@ -37,11 +37,25 @@ function init() {
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
 	localPlayer.setDeaths(0);
-
+  localPlayer.setCharacter("cowboy");
 	level = new Level();
-	level.addObject(0, 200, 800, 50);
-    level.addObject(-200, 100, 200, 20);
-    level.addObject(200, 100, 200, 20);
+	level.addObject(0, 200, 800, 50,"red");
+	level.addObject(1100,200,800,50,"black");
+        level.addObject(2000,700,1800,35,"yellow");
+	level.addObject(1075,475,800,50,"blue")
+
+	level.addObject(1500,25,100,30,"purple");
+        level.addObject(1800,-150,100,30,"purple");
+        level.addObject(2100,-325,100,30,"purple");
+        level.addObject(2400,-500,100,30,"purple");
+        level.addObject(2100,-675,100,30,"purple");
+        level.addObject(1800,-850,100,30,"purple");
+        level.addObject(1500,-1025,100,30,"purple");
+
+        level.addObject(800,-1200,800,50,"white");
+
+    level.addObject(-200, 100, 225, 20,"blue");
+    level.addObject(200, 100, 200, 20,"green");
 	console.log(document.domain);
 	// socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
 	socket = io("http://"+document.domain);
@@ -205,8 +219,11 @@ function draw() {
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
 	ctx.font = "20px serif";
-	var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
-  	ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
+	//ctx.strokeStyle = "red";
+	//var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
+	var message = Math.floor(localPlayer.getDamage()*100);
+	ctx.strokeStyle = "rgb("+(message+150)+","+(200-message)+",0)";
+  ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
   	
 	
 	// Draw the local player

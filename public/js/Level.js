@@ -11,9 +11,9 @@ var Level = function() {
 
 
 //Object format:
-// {x:value, y:value, width:value, height:value}
-  var addObject = function(x, y, width, height){
-    objects.push({x:x, y:y, width:width, height:height});
+// {x:value, y:value, width:value, height:value, color:value}
+  var addObject = function(x, y, width, height, color){
+    objects.push({x:x, y:y, width:width, height:height, color:color});
   };
   
   var getObjects = function(){
@@ -26,8 +26,9 @@ var Level = function() {
 
   var draw = function(ctx){
     ctx.save();
-    ctx.fillStyle = "red";
+    //ctx.fillStyle = "red";
     for (i in objects){
+	ctx.fillStyle = objects[i].color;
       ctx.fillRect(objects[i].x-objects[i].width/2, objects[i].y-objects[i].height/2, objects[i].width, objects[i].height);
     }
     ctx.restore();
