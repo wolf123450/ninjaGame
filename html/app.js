@@ -1,20 +1,19 @@
 var routerApp = angular.module('routerApp', ['ui.router']);
-routerApp.factory('userFactory', ['$http', function($http) {
+routerApp.factory('user', ['$http', function($http) {
 
   var u = {
-    users: [],
     user: {}
   };
   
-  u.getAll = function() {
-	return $http.get('/users').success(function(data){
-		angular.copy(data, u.users);
+  u.create = function() {
+	return $http.post('/createAccount', u.user).success(function(data){
+	//	console.log(data);
 	});
   };
-  
-  u.create = function(user) {
-	return $http.post('/users', user).success(function(data){
-		u.users.push(data);
+
+  u.login = function() {
+	return $http.post('/login', u.user).success(function(data) {
+	//  console.log(data);
 	});
   };
 
@@ -79,17 +78,55 @@ routerApp.config([
 .controller('LoginCtrl', [
   '$scope', 
   '$stateParams', 
-  'postFactory', 
-  function($scope, $stateParams, postFactory){
-	postFactory.u.getAll();
-	$scope.users = postFactory.u.users;
-	$scope.addUser = function() {
-		if($scope.username === '' || $scope.password === '') { return; }
-		postFactory.u.create({
-		username: $scope.username,
-		password: $scope.password,
-		});
-		$scope.formContent='';
-	};
+  '$state',
+  'user', 
+  function($scope, $stateParams, $state, user){
+    $scope.user = user;
+    $scope.changeState = function(url) {
+      console.log("Changing state");
+      $state.go(url);
+    }
+    $scope.addUser = function() {
+      console.log("Create a user");
+      console.log($scope.newname+" "+$scope.newpass);
+      if(!$scope.newname || !$scope.newpass || 
+			$scope.newname=='' || $scope.newpass=='') {
+	console.log("No input content");
+        return; 
+      }
+      if($scope.newpass !== $scope.reenter) {
+	console.log("Password doesnt match");
+	return;
+      }
+      $scope.user.user = ({
+        username: $scope.newname,
+        password: $scope.newpass,
+      });
+      console.log("Added a user: " + $scope.newname);
+      console.log($scope.user);
+      $scope.user.create();
+      $scope.newname='';
+      $scope.newpass='';
+      $scope.reenter='';
+      
+//      $state.go('securityQ');
+    };
+
+    $scope.login = function() {
+      console.log("Logging in");
+      if(!$scope.username || !$scope.password || 
+			$scope.username=='' || $scope.password=='') {
+	console.log("No input content");
+        return; 
+      }
+
+      $scope.user.user = ({
+        username: $scope.username,
+        password: $scope.password,
+      });
+      $scope.user.login();
+      $scope.username = '';
+      $scope.password = '';
+    };
   }
 ]);
