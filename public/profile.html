@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Profile</title>
+	<link rel="stylesheet" type="text/css" href="profile.css">
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<body>
+	<div class = "banner">
+		<h1>NINJA BRAWL<h1>
+		<h4 id = "player">Name of Player</h4>		
+	</div>
+	
+	<div class = "summary"><h3>&#9733; Brawl Summary &#9733;</h3></div>	
+	<div class = "list">
+		<ul>
+			<li id = "rank">Rank:</li>
+			<li id = "death">Deaths:</li>
+			<li id = "time">Total Time:</li>
+		</ul>
+	</div>
+	
+	<center><div><button id = "brawl" class = "start">BRAWL</button></div></center>
+	
+	<script>
+	<!-- populate name and stats -->
+		var name = 'Player Name';
+		var deaths = 7;
+		var time = 13245;
+		
+		var seconds = Math.floor(time);
+		var	minutes = Math.floor(seconds/60);
+		var hours = Math.floor(minutes/60);		
+		seconds = seconds%60;
+		minutes = minutes%60;
+		
+		var rank = time/deaths;
+		rank = Math.floor(rank);
+		
+		$("#player").html(name);
+		$('#rank').html('Rank: ' + rank);
+		$('#death').html('Deaths: ' + deaths);
+		$('#time').html('Total Time: ' + hours + ':' + minutes + ':' + seconds);
+	<!----------------------------->
+	
+	<!-- brawl button function -->
+		$("#brawl").click(function(e)
+		{				
+				//var myurl= 'http://ninjabrawl.me';///game.html';
+				var myurl = '/';
+				window.location.href = myurl;
+		});
+	<!---------------------------->
+	</script>
+</body>
+</html> 
