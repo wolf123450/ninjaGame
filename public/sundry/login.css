@@ -1,0 +1,50 @@
+body {
+	text-align: center;
+	background-color: white;
+	background: url("background.jpg") no-repeat center top;
+	margin: 5px 10px;
+}
+
+#logindiv {
+	margin-top: 60px;
+	position: relative;
+}
+
+#logindiv h1 {
+	font-size: 40pt;
+}
+
+#logindiv h2 {
+	font-size: 28pt;
+
+}
+
+#logindiv p {
+	font-size: 18pt;
+}
+
+#existing {
+	width: 40%;
+	position: absolute;
+	left: 8%;
+	top: 50px;
+}
+
+#newuser {
+	width: 40%;
+	position: absolute;
+	right: 8%;
+	top: 50px;
+}
+
+.resizedTextbox {
+	width: 200px;
+	height: 20px;
+}
+
+.resizedButton {
+	width: 120px;
+	height: 30px;
+	font-size: 14pt;
+}
+
