@@ -205,8 +205,11 @@ function draw() {
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
 	ctx.font = "20px serif";
-	var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
-  	ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
+	//ctx.strokeStyle = "red";
+	//var message = "(" + localPlayer.getX() + "," + localPlayer.getY() + ")";
+	var message = Math.floor(localPlayer.getDamage()*100);
+	ctx.strokeStyle = "rgb("+(message+150)+","+(200-message)+",0)";
+  ctx.strokeText(message, localPlayer.getX(), localPlayer.getY()-25);
   	
 	
 	// Draw the local player
