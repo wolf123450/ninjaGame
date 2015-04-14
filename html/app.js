@@ -1,149 +1,139 @@
 var routerApp = angular.module('routerApp', ['ui.router']);
 routerApp.factory('user', ['$http', function($http) {
 
-  var u = {
-    user: {}
-  };
-  
-  u.create = function() {
-      console.log("create User" + user);
-  	return $http.post('/createAccount', u.user).success(function(data){
-  	 //	console.log(data);
-  	});
-  };
+    var u = {
+        user: {}
+    };
 
-  u.login = function() {
-  	return $http.post('/login', u.user).success(function(data) {
-  	//  console.log(data);
-  	});
-  };
+    u.create = function() {
+        return $http.post('/createAccount', u.user).success(function(data) {
+            //	console.log(data);
+        });
+    };
 
-  u.upmatch = function(user) {
-	return $http.put('/users/' + user._id + '/upmatch')
-	  	.success(function(data){
-	    		user.matches += 1;
-	  	});
-  };
+    u.login = function() {
+        return $http.post('/login', u.user).success(function(data) {
+              console.log(data);
+              if (data.ok == true){
+                window.location.href = "/";
+              } 
+              //
+              //document = data;
+        });
+    };
 
-  u.upwins = function(user) {
+    u.upmatch = function(user) {
+        return $http.put('/users/' + user._id + '/upmatch')
+            .success(function(data) {
+                user.matches += 1;
+            });
+    };
+
+    u.upwins = function(user) {
         return $http.put('/users/' + user._id + '/upwins')
-                .success(function(data){
-                        user.wins += 1;
-                });
-  };
+            .success(function(data) {
+                user.wins += 1;
+            });
+    };
 
-  u.uplosses = function(user) {
+    u.uplosses = function(user) {
         return $http.put('/users/' + user._id + '/uplosses')
-                .success(function(data){
-                        user.losses += 1;
-                });
-  };
+            .success(function(data) {
+                user.losses += 1;
+            });
+    };
 
-  u.moneymanip = function(amount, user) {
-        return $http.put('/users/' + user._id + '/upmatch'+ amount)
-                .success(function(data){
-                        user.matches += amount;
-                });
-  };
+    u.moneymanip = function(amount, user) {
+        return $http.put('/users/' + user._id + '/upmatch' + amount)
+            .success(function(data) {
+                user.matches += amount;
+            });
+    };
 
-  u.getUser = function(id) {
-	return $http.get('/users/' + id).success(function(data){
-		angular.copy(data, u.user);
-	});
-  };
+    u.getUser = function(id) {
+        return $http.get('/users/' + id).success(function(data) {
+            angular.copy(data, u.user);
+        });
+    };
 
-  return u;
+    return u;
 }])
 
 routerApp.config([
-  '$stateProvider',
-  '$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/login');
-  $stateProvider.state('login', {
-    url: '/login',
-    templateUrl: '/login.html'
-  }).state('securityQ', {
-    url: '/securityQ',
-    templateUrl: '/securityQ.html',
-    controller: 'SecureCtrl'
-  });
-}])
-.controller('SecureCtrl', [
-  '$scope',
-  '$stateParams',
-  function($scope, $stateParams) {
-      console.log("SecureFunction");
-  }
+        '$stateProvider',
+        '$urlRouterProvider',
+        function($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise('/login');
+            $stateProvider.state('login', {
+                url: '/login',
+                templateUrl: '/login.html'
+            }).state('securityQ', {
+                url: '/securityQ',
+                templateUrl: '/securityQ.html',
+                controller: 'SecureCtrl'
+            });
+        }
+    ])
+    .controller('SecureCtrl', [
+        '$scope',
+        '$stateParams',
+        function($scope, $stateParams) {
+            console.log("SecureFunction");
+        }
 
-])
-.controller('LoginCtrl', [
-  '$scope', 
-  '$stateParams', 
-<<<<<<< HEAD
-  'postFactory', 
-  function($scope, $stateParams, postFactory){
-	postFactory.u.getAll();
-	$scope.users = postFactory.u.users;
-	$scope.addUser = function() {
-    console.log("add user");
-		if($scope.username === '' || $scope.password === '') { return; }
-		postFactory.u.create({
-		username: $scope.username,
-		password: $scope.password,
-		});
-		$scope.formContent='';
-	};
-=======
-  '$state',
-  'user', 
-  function($scope, $stateParams, $state, user){
-    $scope.user = user;
-    $scope.changeState = function(url) {
-      console.log("Changing state");
-      $state.go(url);
-    }
-    $scope.addUser = function() {
-      console.log("Create a user");
-      console.log($scope.newname+" "+$scope.newpass);
-      if(!$scope.newname || !$scope.newpass || 
-			$scope.newname=='' || $scope.newpass=='') {
-	console.log("No input content");
-        return; 
-      }
-      if($scope.newpass !== $scope.reenter) {
-	console.log("Password doesnt match");
-	return;
-      }
-      $scope.user.user = ({
-        username: $scope.newname,
-        password: $scope.newpass,
-      });
-      console.log("Added a user: " + $scope.newname);
-      console.log($scope.user);
-      $scope.user.create();
-      $scope.newname='';
-      $scope.newpass='';
-      $scope.reenter='';
-      
-//      $state.go('securityQ');
-    };
+    ])
+    .controller('LoginCtrl', [
+        '$scope',
+        '$stateParams',
+        '$state',
+        'user',
+        function($scope, $stateParams, $state, user) {
+            $scope.user = user;
+            $scope.changeState = function(url) {
+                console.log("Changing state");
+                $state.go(url);
+            }
+            $scope.addUser = function() {
+                console.log("Create a user");
+                console.log($scope.newname + " " + $scope.newpass);
+                if (!$scope.newname || !$scope.newpass ||
+                    $scope.newname == '' || $scope.newpass == '') {
+                    console.log("No input content");
+                    return;
+                }
+                if ($scope.newpass !== $scope.reenter) {
+                    console.log("Password doesnt match");
+                    return;
+                }
+                $scope.user.user = ({
+                    username: $scope.newname,
+                    password: $scope.newpass,
+                });
+                console.log("Added a user: " + $scope.newname);
+                console.log($scope.user);
+                $scope.user.create();
+                $scope.newname = '';
+                $scope.newpass = '';
+                $scope.reenter = '';
 
-    $scope.login = function() {
-      console.log("Logging in");
-      if(!$scope.username || !$scope.password || 
-			$scope.username=='' || $scope.password=='') {
-	console.log("No input content");
-        return; 
-      }
+                //      $state.go('securityQ');
+            };
 
-      $scope.user.user = ({
-        username: $scope.username,
-        password: $scope.password,
-      });
-      $scope.user.login();
-      $scope.username = '';
-      $scope.password = '';
-    };
->>>>>>> d0831b268b04bd4f636a76332f65d834a8640f76
-  }
-]);
+            $scope.login = function() {
+                console.log("Logging in");
+                if (!$scope.username || !$scope.password ||
+                    $scope.username == '' || $scope.password == '') {
+                    console.log("No input content");
+                    return;
+                }
+
+                $scope.user.user = ({
+                    username: $scope.username,
+                    password: $scope.password,
+                });
+                $scope.user.login();
+                $scope.username = '';
+                $scope.password = '';
+            };
+        }
+    ]);
