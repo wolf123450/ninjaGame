@@ -13,6 +13,7 @@ routerApp.factory('userFactory', ['$http', function($http) {
   };
   
   u.create = function(user) {
+    console.log("create User" + user);
 	return $http.post('/users', user).success(function(data){
 		u.users.push(data);
 	});
@@ -72,7 +73,7 @@ routerApp.config([
   '$scope',
   '$stateParams',
   function($scope, $stateParams) {
-
+      console.log("SecureFunction");
   }
 
 ])
@@ -84,6 +85,7 @@ routerApp.config([
 	postFactory.u.getAll();
 	$scope.users = postFactory.u.users;
 	$scope.addUser = function() {
+    console.log("add user");
 		if($scope.username === '' || $scope.password === '') { return; }
 		postFactory.u.create({
 		username: $scope.username,
