@@ -48,11 +48,36 @@ app.get('/login', function(req, res) {
   });
 });
 
-app.post('/login', passport.authenticate('local-login',{
-  successRedirect: '/', 
-  failureRedirect: '/login', 
- // failureFlash: true 
-}));
+// app.post('/login', passport.authenticate('local-login',{
+//   successRedirect: '/', 
+//   failureRedirect: '/login' 
+//   // failureFlash: true 
+// }));
+
+app.post('/login', function(req, res, next) {
+  passport.authenticate('local-login', function(err, user, info) {
+    switch (req.accepts('html', 'json')) {
+      case 'html':
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/');
+        });
+        break;
+      case 'json':
+        if (err)  { return next(err); }
+        if (!user) { return res.status(401).send({"ok": false}); }
+        req.logIn(user, function(err) {
+          if (err) { return res.status(401).send({"ok": false}); }
+          return res.send({"ok": true});
+        });
+        break;
+      default:
+        res.status(406).send();
+    }
+  })(req, res, next);    
+});
 
 app.post('/createAccount', passport.authenticate('local-signup', {
   //successRedirect: '/',

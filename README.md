@@ -12,6 +12,11 @@ After forking run
 
   npm install passport
 
+  npm install cookie-parser
+
+  npm install express-session
+
+  npm install mongoose
 in order to make the game work.
 
   node game.js

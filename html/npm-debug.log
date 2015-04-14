@@ -1,0 +1,82 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'js-beatify' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.38
+4 verbose cache add [ 'js-beatify', null ]
+5 verbose cache add name=undefined spec="js-beatify" args=["js-beatify",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'js-beatify',
+6 verbose parsed url   path: 'js-beatify',
+6 verbose parsed url   href: 'js-beatify' }
+7 silly lockFile 27e03b1a-js-beatify js-beatify
+8 verbose lock js-beatify /root/.npm/27e03b1a-js-beatify.lock
+9 silly lockFile 27e03b1a-js-beatify js-beatify
+10 silly lockFile 27e03b1a-js-beatify js-beatify
+11 verbose addNamed [ 'js-beatify', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 9fe4f9d2-js-beatify js-beatify@
+14 verbose lock js-beatify@ /root/.npm/9fe4f9d2-js-beatify.lock
+15 silly addNameRange { name: 'js-beatify', range: '*', hasData: false }
+16 verbose request where is /js-beatify
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id be7f1abfbcad2b15
+19 verbose url raw /js-beatify
+20 verbose url resolving [ 'https://registry.npmjs.org/', './js-beatify' ]
+21 verbose url resolved https://registry.npmjs.org/js-beatify
+22 verbose request where is https://registry.npmjs.org/js-beatify
+23 info trying registry request attempt 1 at 01:48:24
+24 http GET https://registry.npmjs.org/js-beatify
+25 http 404 https://registry.npmjs.org/js-beatify
+26 verbose headers { date: 'Tue, 14 Apr 2015 01:48:24 GMT',
+26 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 verbose headers   'content-type': 'application/json',
+26 verbose headers   'cache-control': 'max-age=0',
+26 verbose headers   'content-length': '51',
+26 verbose headers   'accept-ranges': 'bytes',
+26 verbose headers   via: '1.1 varnish',
+26 verbose headers   age: '0',
+26 verbose headers   'x-served-by': 'cache-sjc3132-SJC',
+26 verbose headers   'x-cache': 'MISS',
+26 verbose headers   'x-cache-hits': '0',
+26 verbose headers   'x-timer': 'S1428976104.770995,VS0,VE40',
+26 verbose headers   'keep-alive': 'timeout=10, max=50',
+26 verbose headers   connection: 'Keep-Alive' }
+27 silly registry.get cb [ 404,
+27 silly registry.get   { date: 'Tue, 14 Apr 2015 01:48:24 GMT',
+27 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 silly registry.get     'content-type': 'application/json',
+27 silly registry.get     'cache-control': 'max-age=0',
+27 silly registry.get     'content-length': '51',
+27 silly registry.get     'accept-ranges': 'bytes',
+27 silly registry.get     via: '1.1 varnish',
+27 silly registry.get     age: '0',
+27 silly registry.get     'x-served-by': 'cache-sjc3132-SJC',
+27 silly registry.get     'x-cache': 'MISS',
+27 silly registry.get     'x-cache-hits': '0',
+27 silly registry.get     'x-timer': 'S1428976104.770995,VS0,VE40',
+27 silly registry.get     'keep-alive': 'timeout=10, max=50',
+27 silly registry.get     connection: 'Keep-Alive' } ]
+28 silly lockFile 9fe4f9d2-js-beatify js-beatify@
+29 silly lockFile 9fe4f9d2-js-beatify js-beatify@
+30 error 404 404 Not Found: js-beatify
+30 error 404
+30 error 404 'js-beatify' is not in the npm registry.
+30 error 404 You should bug the author to publish it
+30 error 404
+30 error 404 Note that you can also install from a
+30 error 404 tarball, folder, or http url, or git url.
+31 error System Linux 3.14.33-26.47.amzn1.x86_64
+32 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "js-beatify"
+33 error cwd /var/node/ninjaGame/html
+34 error node -v v0.10.38
+35 error npm -v 1.4.28
+36 error code E404
+37 verbose exit [ 1, true ]
