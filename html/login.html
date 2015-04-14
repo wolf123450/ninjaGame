@@ -14,25 +14,25 @@
 <div id="pageHeading">
 <h1><big><big><i>NINJA BRAWL</i></big></big></h1>
 
-<div id="pageContent">
+<div id="pageContent" ng-controller="LoginCtrl">
 <ui-view></ui-view>
 <script type="text/ng-template" id="/login.html">
 
-  <div id="existing">
+  <div id="existing" ng-controller="LoginCtrl">
     <h2>LOGIN</h2>
-    <form id="loginform">
-<p>Username<br><input id="username" type="text" class="resizedTextbox" /></p>
-    <p>Password<br><input id="password" type="text" class="resizedTextbox" /></p>
-    <input id="loginbtn" type="submit" value="Login" class="resizedButton" />
+    <form ng-submit="login()" id="loginform">
+<p>Username<br><input ng-model="username" type="text" class="resizedTextbox" /></p>
+    <p>Password<br><input ng-model="password" type="password" class="resizedTextbox" /></p>
+    <input type="submit" value="Login" class="resizedButton" />
     </form>
   </div>
 
-  <div id="newuser">
+  <div id="newuser" ng-controller="LoginCtrl">
     <h2>NEW USER</h2>
-    <form id="createuserform" action="#/securityQ">
-    <p>Enter a username<br><input id="newname" type="text" class="resizedTextbox" /></p>
-    <p>Enter a password<br><input id="newpass" type="text" class="resizedTextbox" /></p>
-    <p>Re-enter your password<br><input id="reenter" type"text" class="resizedTextbox" /></p>
+    <form ng-submit="addUser()"> <!-- action="#/securityQ"-->
+    <p>Enter a username<br><input ng-model="newname" type="text" class="resizedTextbox" /></p>
+    <p>Enter a password<br><input ng-model="newpass" type="password" class="resizedTextbox" /></p>
+    <p>Re-enter your password<br><input ng-model="reenter" type="password" class="resizedTextbox" /></p>
     <input id="creatbtn" type="submit" value="Create" class="resizedButton" />
     </form>
   </div>
