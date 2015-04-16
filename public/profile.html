@@ -36,6 +36,16 @@
 				var deaths = data.username.losses;
 				var money = data.username.money;
 				var time = 13245;
+                var color = 'rbg(30,70,0)';
+                $.getJSON('/color', function(data){
+                    color = data.color;
+                    console.log(color);
+                    $('#mycolor').spectrum('set', color);
+                });
+
+                if (data.username.color){
+                    color = data.username.color;
+                }
 				
 				var seconds = Math.floor(time);
 				var	minutes = Math.floor(seconds/60);
@@ -50,12 +60,20 @@
 				$('#rank').html('Rank: ' + rank);
 				$('#death').html('Deaths: ' + deaths);
 				$('#time').html('Total Time: ' + hours + ':' + minutes + ':' + seconds);
-		    $('#money').html('Money: $' + money);
-		    $("#mycolor").spectrum(
-		      {color:'yellow',
-		       showInput:true
-		      });
-		    console.log($('#mycolor').color);
+    		    $('#money').html('Money: $' + money);
+
+                console.log(color);
+    		    $("#mycolor").spectrum(
+    		      {color:color,
+    		       showInput:true,
+                   change: function(newColor){
+                        color = newColor.toHexString();
+                        //newColor.toHexString();
+                        $.post('/color', {color:color});
+                        console.log(color);
+                   }
+    		      });
+    		    //console.log($('#mycolor').spectrum('get'));
 		    
 		    
 			} else {

@@ -139,6 +139,63 @@ function routes() {
   
   });
 
+  app.get('/color', function(req,res){
+    //var color = "rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+    var color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    if (req.user && req.user.color){
+      color = req.user.color;
+    } else if (req.user) {
+        User.findOne(
+          {'username':req.user.username},
+          function(err, user){
+            if (err) {
+              console.log('choosecolor error');
+              return ;
+            }
+            
+            if (!user){
+              console.log('Could not find user: ' + username);
+              return;
+            }
+            
+            user.setColor(color);
+            
+            return ;
+            
+          });
+    }
+    console.log("color " + color); 
+    res.status(200);
+    
+    res.end(JSON.stringify({color:color}));
+  });
+
+  app.post('/color', function(req,res) {
+      console.log(req.body);
+      if (req.body.color && req.user){
+        User.findOne(
+          {'username':req.user.username},
+          function(err, user){
+            if (err) {
+              console.log('choosecolor error');
+              return ;
+            }
+            
+            if (!user){
+              console.log('Could not find user: ' + username);
+              return;
+            }
+            
+            user.setColor(req.body.color);
+            
+            return ;
+            
+          });
+      }
+      res.status(200);
+      res.end();
+  })
+
   app.get('/login', function(req, res) {
     fs.readFile(ROOT_DIR + 'login.html', 'utf8', function(err, data) {
       if (err) {
@@ -329,6 +386,7 @@ function playerById(id) {
 
   return false;
 };
+
 
 
 init();
