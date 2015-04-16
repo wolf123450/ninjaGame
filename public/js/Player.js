@@ -107,6 +107,11 @@ var Player = function(startX, startY) {
             yVel = 0;
             deaths++;
             damage = 1;
+             
+            $.get('/updeaths', function(data){
+              console.log(data);
+              console.log('deaths');
+            });
             return true;
         }
 
@@ -128,7 +133,7 @@ var Player = function(startX, startY) {
             // double jump if in air and havent double jumped
         } else if (keys.up && doubleJump && time.getTime() - timeout.getTime() > 150){
           
-          console.log(timeout.getTime());
+          //console.log(timeout.getTime());
           yVel = -jumpVel;//*3/4;
           doubleJump = false;
           timeout = time;

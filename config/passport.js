@@ -83,7 +83,7 @@ module.exports = function(passport) {
           req.session.messages = ['Incorrect password'];
           return done(null, false);
         }
-        console.log(user);
+        //console.log(user);
         return done(null, user);
       });
     }));

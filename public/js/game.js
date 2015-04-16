@@ -37,6 +37,11 @@ function init() {
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
 	localPlayer.setDeaths(0);
+	$.getJSON('/deaths', function(data){
+	    localPlayer.setDeaths(data.deaths);
+	});
+	
+	
   localPlayer.setCharacter("cowboy");
 	level = new Level();
 	level.addObject(0, 200, 800, 50,"red");

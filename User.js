@@ -4,6 +4,7 @@ var UserSchema = new mongoose.Schema({
   hashed_password: String,
   securityQ: String,
   securityA: String,
+  color: String,
   money: {type: Number, default: 500},
   matches: {type: Number, default: 0},
   wins: {type: Number, default: 0},
@@ -28,6 +29,11 @@ UserSchema.methods.uploses = function(cb) {
 
 UserSchema.methods.moneymanip = function(change,cb) {
   this.money += change;
+  this.save(cb);
+};
+
+UserSchema.methods.setColor = function(color, cb) {
+  this.color = color;
   this.save(cb);
 };
 

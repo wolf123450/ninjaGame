@@ -17,9 +17,12 @@ require('./User'); // The user database model
 // Set up configurations
 app.use('/', express.static('./html', {maxAge: 60*60*1000}));
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
 app.use(expressSession({
   secret: 'FarOverTheMistyMountains',
+  saveUninitialized: true,
+  resave: true,
   cookie: {maxAge: 60*60*1000},
 }));
 app.use(passport.initialize());
