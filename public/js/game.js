@@ -36,7 +36,11 @@ function init() {
 	// Initialise the local player
 	localPlayer = new Player(startX, startY);
     localPlayer.setColor("rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")");
-	localPlayer.setDeaths(0);
+	$.getJSON('/color', function(data){
+        localPlayer.setColor(data.color);
+    });
+
+    localPlayer.setDeaths(0);
 	$.getJSON('/deaths', function(data){
 	    localPlayer.setDeaths(data.deaths);
 	});
