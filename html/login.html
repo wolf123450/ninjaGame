@@ -20,7 +20,6 @@
 
   <div id="existing" ng-controller="LoginCtrl">
     <h2>LOGIN</h2>
-    <form ng-submit="login()" id="loginform">
 <p>Username<br><input ng-model="username" type="text" class="resizedTextbox" /></p>
     <p>Password<br><input ng-model="password" type="password" class="resizedTextbox" /></p>
     <input type="submit" value="Login" class="resizedButton" />
@@ -29,6 +28,7 @@
 
   <div id="newuser" ng-controller="LoginCtrl">
     <h2>NEW USER</h2>
+    <p ng-hide="successfullCreate" color="red">User already exists</p>
     <form ng-submit="addUser()"> <!-- action="#/securityQ"-->
     <p>Enter a username<br><input ng-model="newname" type="text" class="resizedTextbox" /></p>
     <p>Enter a password<br><input ng-model="newpass" type="password" class="resizedTextbox" /></p>

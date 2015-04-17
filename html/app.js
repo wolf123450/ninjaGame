@@ -7,7 +7,12 @@ routerApp.factory('user', ['$http', function($http) {
 
     u.create = function() {
         return $http.post('/createAccount', u.user).success(function(data) {
-            //	console.log(data);
+            if (data.ok) {
+	      window.location.href = '/';
+	    }
+	    else {
+	      $scope.successfullCreate = false;
+	    }
         });
     };
 
@@ -88,6 +93,7 @@ routerApp.config([
         '$state',
         'user',
         function($scope, $stateParams, $state, user) {
+	    $scope.successfullCreate = true;
             $scope.user = user;
             $scope.changeState = function(url) {
                 console.log("Changing state");

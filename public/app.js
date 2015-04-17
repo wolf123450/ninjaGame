@@ -2,23 +2,34 @@ var routerApp = angular.module('routerApp', ['ui.router']);
 routerApp.factory('user', ['$http', function($http) {
 
     var u = {
-        user: {}
+        user: {created: true}
     };
 
-    u.create = function() {
+    u.create = function(cb)  {
         return $http.post('/createAccount', u.user).success(function(data) {
             console.log(data);
+	    if(data.ok) {
+	      window.location.href = '/profile.html';
+	      cb(true);
+	    }
+	    else {
+	//	alert("User already exists.  Be more original");
+	      this.created = true;
+	      cb(false);
+	   }
         });
     };
 
-    u.login = function() {
+    u.login = function(cb) {
         return $http.post('/login', u.user).success(function(data) {
               console.log(data);
               if (data.ok == true){
                 window.location.href = "/profile.html";
+		cb(true);
               } 
-              //
-              //document = data;
+	      else {
+ 		cb(false);
+	      }
         });
     };
 
@@ -89,6 +100,8 @@ routerApp.config([
         'user',
         function($scope, $stateParams, $state, user) {
             $scope.user = user;
+	    $scope.successfullCreate = true;
+	    $scope.successfullLogin = true;
             $scope.changeState = function(url) {
                 console.log("Changing state");
                 $state.go(url);
@@ -111,7 +124,10 @@ routerApp.config([
                 });
                 console.log("Added a user: " + $scope.newname);
                 console.log($scope.user);
-                $scope.user.create();
+                $scope.user.create(function(data) {
+		  $scope.successfullCreate = data;
+	          console.log($scope.successfullCreate);
+		});
                 $scope.newname = '';
                 $scope.newpass = '';
                 $scope.reenter = '';
@@ -131,7 +147,9 @@ routerApp.config([
                     username: $scope.username,
                     password: $scope.password,
                 });
-                $scope.user.login();
+                $scope.user.login(function(data) { 
+		  $scope.successfullLogin = data;
+		});
                 $scope.username = '';
                 $scope.password = '';
             };

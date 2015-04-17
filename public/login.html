@@ -20,6 +20,7 @@
 
   <div id="existing" ng-controller="LoginCtrl">
     <h2>LOGIN</h2>
+    <p class="error" ng-hide="successfullLogin">Invalid username or password</p>
     <form ng-submit="login()" id="loginform">
 <p>Username<br><input ng-model="username" type="text" class="resizedTextbox" /></p>
     <p>Password<br><input ng-model="password" type="password" class="resizedTextbox" /></p>
@@ -29,6 +30,7 @@
 
   <div id="newuser" ng-controller="LoginCtrl">
     <h2>NEW USER</h2>
+    <p class="error" ng-hide="successfullCreate">User already exists</p>
     <form ng-submit="addUser()"> <!-- action="#/securityQ"-->
     <p>Enter a username<br><input ng-model="newname" type="text" class="resizedTextbox" /></p>
     <p>Enter a password<br><input ng-model="newpass" type="password" class="resizedTextbox" /></p>
