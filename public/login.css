@@ -28,6 +28,11 @@ body {
 	right: 8%;
 }
 
+.error {
+	font-size: 10pt;
+	color: red;
+}
+
 .resizedTextbox {
 	width: 200px;
 	height: 20px;

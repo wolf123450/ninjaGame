@@ -254,14 +254,14 @@ function routes() {
                         return next( err );
                     }
                     if ( !user ) {
-                        return res.status( 401 )
+                        return res.status( 200 )
                             .send( {
                                 "ok": false
                             } );
                     }
                     req.logIn( user, function ( err ) {
                         if ( err ) {
-                            return res.status( 401 )
+                            return res.status( 200 )
                                 .send( {
                                     "ok": false
                                 } );
