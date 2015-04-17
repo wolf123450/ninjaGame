@@ -7,7 +7,7 @@ routerApp.factory('user', ['$http', function($http) {
 
     u.create = function() {
         return $http.post('/createAccount', u.user).success(function(data) {
-            //	console.log(data);
+            console.log(data);
         });
     };
 
