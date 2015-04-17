@@ -141,7 +141,8 @@ function routes() {
 
   app.get('/color', function(req,res){
     //var color = "rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
-    var color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    //var color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    var color = "#" + ('00000'+(Math.random()*0xFFFFFF<<0).toString(16)).slice(-6)
     if (req.user && req.user.color){
       color = req.user.color;
     } else if (req.user) {
