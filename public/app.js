@@ -2,7 +2,7 @@ var routerApp = angular.module('routerApp', ['ui.router']);
 routerApp.factory('user', ['$http', function($http) {
 
     var u = {
-        user: {created: true}
+        user: {}
     };
 
     u.create = function(cb)  {
@@ -10,12 +10,11 @@ routerApp.factory('user', ['$http', function($http) {
             console.log(data);
 	    if(data.ok) {
 	      window.location.href = '/profile.html';
-	      cb(true);
+	      cb({hide:true, message:''});
 	    }
 	    else {
 	//	alert("User already exists.  Be more original");
-	      this.created = true;
-	      cb(false);
+	      cb({hide:false, message:'User already exists. Be more creative'});
 	   }
         });
     };
@@ -25,10 +24,10 @@ routerApp.factory('user', ['$http', function($http) {
               console.log(data);
               if (data.ok == true){
                 window.location.href = "/profile.html";
-		cb(true);
+		cb({hide:true, message:''});
               } 
 	      else {
- 		cb(false);
+ 		cb({hide:false, message:'Invalid username or password'});
 	      }
         });
     };
@@ -100,15 +99,16 @@ routerApp.config([
         'user',
         function($scope, $stateParams, $state, user) {
             $scope.user = user;
-	    $scope.successfullCreate = true;
-	    $scope.successfullLogin = true;
+	    $scope.createUser = {hide:true, message:''};
+	    $scope.loginUser = {hide:true, message:''};
             $scope.changeState = function(url) {
                 console.log("Changing state");
                 $state.go(url);
             }
             $scope.addUser = function() {
+		clearErrors();
                 console.log("Create a user");
-                console.log($scope.newname + " " + $scope.newpass);
+                console.log($scope.newname);
                 if (!$scope.newname || !$scope.newpass ||
                     $scope.newname == '' || $scope.newpass == '') {
                     console.log("No input content");
@@ -116,6 +116,8 @@ routerApp.config([
                 }
                 if ($scope.newpass !== $scope.reenter) {
                     console.log("Password doesnt match");
+		    $scope.createUser.message = "Passwords must match";
+		    $scope.createUser.hide = false;
                     return;
                 }
                 $scope.user.user = ({
@@ -125,17 +127,19 @@ routerApp.config([
                 console.log("Added a user: " + $scope.newname);
                 console.log($scope.user);
                 $scope.user.create(function(data) {
-		  $scope.successfullCreate = data;
-	          console.log($scope.successfullCreate);
+		  $scope.createUser = data;
+	          console.log($scope.createUser);
 		});
-                $scope.newname = '';
-                $scope.newpass = '';
-                $scope.reenter = '';
+		resetInput();
+               // $scope.newname = '';
+               // $scope.newpass = '';
+               // $scope.reenter = '';
 
                 //      $state.go('securityQ');
             };
 
             $scope.login = function() {
+		clearErrors();
                 console.log("Logging in");
                 if (!$scope.username || !$scope.password ||
                     $scope.username == '' || $scope.password == '') {
@@ -148,10 +152,24 @@ routerApp.config([
                     password: $scope.password,
                 });
                 $scope.user.login(function(data) { 
-		  $scope.successfullLogin = data;
+		  $scope.loginUser = data;
 		});
+		resetInput();
+              //  $scope.username = '';
+              //  $scope.password = '';
+            };
+
+	    clearErrors = function() {
+		$scope.createUser.hide = true;
+		$scope.loginUser.hide = true;
+	    };
+
+	    resetInput = function() {
+                $scope.newname = '';
+                $scope.newpass = '';
+                $scope.reenter = '';
                 $scope.username = '';
                 $scope.password = '';
-            };
+	    };
         }
     ]);
