@@ -19,8 +19,8 @@
 		<ul>
 			<li id = "rank">Rank:</li>
 			<li id = "death">Deaths:</li>
-			<li id = "time">Total Time:</li>
-			<li id = "money">Money:</li>
+			<!-- <li id = "time">Total Time:</li> -->
+			<!-- <li id = "money">Money:</li> -->
 			<li>Color: <input type="color" id = "mycolor"></li>
 		</ul>
 	</div>
@@ -53,14 +53,14 @@
 				seconds = seconds%60;
 				minutes = minutes%60;
 				
-				var rank = deaths/time; //time/deaths;
+				var rank =Math.random()*2000+1; //deaths/time; //time/deaths;
 				rank = Math.floor(rank);
 				
 				$("#player").html(name);
 				$('#rank').html('Rank: ' + rank);
 				$('#death').html('Deaths: ' + deaths);
-				$('#time').html('Total Time: ' + hours + ':' + minutes + ':' + seconds);
-    		    $('#money').html('Money: $' + money);
+				//$('#time').html('Total Time: ' + hours + ':' + minutes + ':' + seconds);
+    		    //$('#money').html('Money: $' + money);
 
                 console.log(color);
     		    $("#mycolor").spectrum(
