@@ -8,6 +8,7 @@ var Player = function ( startX, startY ) {
         color,
         deaths,
         character,
+        username,
         armAngle = 0,
         armSpeed = 10,
         direction = 1,
@@ -25,6 +26,7 @@ var Player = function ( startX, startY ) {
         timeout = new Date(),
         damage = 1;
 
+
     var getJson = function () {
         return {
             id: id,
@@ -33,8 +35,21 @@ var Player = function ( startX, startY ) {
             armAngle: armAngle,
             dir: direction,
             color: color,
-            deaths: deaths
+            deaths: deaths,
+            username: username
         };
+    };
+
+    var setFromJson = function(data){
+        id = data.id;
+        x = data.x;
+        y = data.y;
+        armAngle = data.armAngle;
+        direction = data.dir;
+        color = data.color;
+        deaths = data.deaths;
+        username = data.username;
+
     };
 
     var getX = function () {
@@ -85,6 +100,14 @@ var Player = function ( startX, startY ) {
         // console.log( newColor );
         color = newColor;
     };
+
+    var setUsername = function (newName){
+        username = newName;
+    }
+
+    var getUsername = function(){
+        return username;
+    }
 
     var getColor = function () {
         return color;
@@ -350,8 +373,11 @@ var Player = function ( startX, startY ) {
         getArmAngle: getArmAngle,
         setDir: setDir,
         setArmAngle: setArmAngle,
+        setFromJson: setFromJson,
         update: update,
         setColor: setColor,
+        setUsername: setUsername,
+        getUsername: getUsername,
         getColor: getColor,
         hit: hit,
         getDamage: getDamage,

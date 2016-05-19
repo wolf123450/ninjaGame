@@ -10,22 +10,30 @@
 
 <body>
 	<div class = "banner">
-		<h1>NINJA BRAWL<h1>
-		<h4 id = "player">Name of Player</h4>		
+		<h1>NINJA BRAWL</h1>
+		<p id = "player">Name of Player</p>		
 	</div>
 	
 	<div class = "summary"><h3>&#9733; Brawl Summary &#9733;</h3></div>	
-	<div class = "list">
-		<ul>
-			<li id = "rank">Rank:</li>
-			<li id = "death">Deaths:</li>
-			<!-- <li id = "time">Total Time:</li> -->
-			<!-- <li id = "money">Money:</li> -->
-			<li>Color: <input type="color" id = "mycolor"></li>
-		</ul>
+    <div class="float">
+    	<div class = "list">
+    		<ul>
+    			<li id = "rank">Rank:</li>
+    			<li id = "death">Deaths:</li>
+    			<!-- <li id = "time">Total Time:</li> -->
+    			<!-- <li id = "money">Money:</li> -->
+    			<li>Color: <input type="color" id = "mycolor"></li>
+    		</ul>
+    	</div>
+
+        <div class = "help">
+            Press q to attack. <br>
+            Move with arrows keys.<br>
+            Press up to jump.<br>
+            Press up twice to double jump.<br>
+        </div>
 	</div>
-	
-	<center><div><button id = "brawl" class = "start">BRAWL</button></div></center>
+	<div class = "float"><button id = "brawl" class = "start">BRAWL</button></div>
 	
 	<script>
 	<!-- populate name and stats -->
@@ -66,6 +74,7 @@
     		    $("#mycolor").spectrum(
     		      {color:color,
     		       showInput:true,
+                   preferredFormat: "hex",
                    change: function(newColor){
                         color = newColor.toHexString();
                         //newColor.toHexString();
