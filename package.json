@@ -1,0 +1,31 @@
+{
+  "name": "ninjagame",
+  "version": "1.0.0",
+  "description": "A game made with html5 canvas and socket.io",
+  "main": "game.js",
+  "dependencies": {
+    "basic-auth-connect": "^1.0.0",
+    "body-parser": "^1.15.1",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.17",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolf123450/ninjaGame.git"
+  },
+  "author": "Clint Day et al",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wolf123450/ninjaGame/issues"
+  },
+  "homepage": "https://github.com/wolf123450/ninjaGame#readme"
+}
