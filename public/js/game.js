@@ -35,6 +35,9 @@ function init() {
 
     // Initialise the local player
     localPlayer = new Player( startX, startY );
+
+
+
     localPlayer.setColor( "rgb(" + Math.floor( Math.random() * 255 ) + "," + Math.floor( Math.random() * 255 ) + "," + Math.floor( Math.random() * 255 ) + ")" );
     $.getJSON( '/color', function ( data ) {
         localPlayer.setColor( data.color );
@@ -44,6 +47,8 @@ function init() {
     $.getJSON( '/deaths', function ( data ) {
         localPlayer.setDeaths( data.deaths );
     } );
+
+    
 
 
     localPlayer.setCharacter( "cowboy" );
@@ -65,11 +70,24 @@ function init() {
 
     level.addObject( -200, 100, 225, 20, "blue" );
     level.addObject( 200, 100, 200, 20, "green" );
+
+    for (var i = 0; i < 10; i++){
+        level.addObject( -600 - i*200, -i*200, 100, 20, "#315E91");
+    }
+
+    level.addObject(-3000, -2000, 800, 50, "#244469");
     console.log( document.domain );
     // socket = io.connect("http://"+document.domain+":8000", { port: 8000, transports: ["websocket"]});
     socket = io( "http://" + document.domain );
-    // Start listening for events
-    setEventHandlers();
+    
+    $.getJSON( '/api/user_data', function (data) {
+        localPlayer.setUsername(data.username.username);
+        console.log(localPlayer.getUsername());
+        // Start listening for events
+        setEventHandlers();
+
+    })
+    
 
     remotePlayers = [];
     cameraX = 0;
@@ -82,7 +100,16 @@ function init() {
             //console.log("checked login " + data.username.username);
         } );
     }, 1000 * 5 ); // every five seconds
-
+    $(window).blur(function(){
+      //your code here
+      console.log('blur');
+      $.get('/logout', function(data){
+        window.location.href = "/";
+      });
+    });
+    $(window).focus(function(){
+      //your code
+    });
 };
 
 
@@ -128,7 +155,10 @@ function onResize( e ) {
 function onSocketConnected() {
     console.log( "Connected to socket server" );
     localPlayer.setId( this.id );
+    console.log(localPlayer.getUsername());
+
     socket.emit( "new player", localPlayer.getJson() );
+    
 };
 
 function onSocketDisconnect() {
@@ -143,9 +173,10 @@ function onNewPlayer( data ) {
     console.log( data );
     //remotePlayers = [];
     var newPlayer = new Player( data.x, data.y );
-    newPlayer.setId( data.id );
-    newPlayer.setColor( data.color );
-    newPlayer.setDeaths( data.deaths );
+    newPlayer.setFromJson(data);
+    // newPlayer.setId( data.id );
+    // newPlayer.setColor( data.color );
+    // newPlayer.setDeaths( data.deaths );
     remotePlayers.push( newPlayer );
 };
 
@@ -156,12 +187,12 @@ function onMovePlayer( data ) {
         console.log( "Player not found: " + data.id );
         return;
     };
-
-    movePlayer.setX( data.x );
-    movePlayer.setY( data.y );
-    movePlayer.setDir( data.dir );
-    movePlayer.setArmAngle( data.armAngle );
-    movePlayer.setDeaths( data.deaths );
+    movePlayer.setFromJson(data);
+    // movePlayer.setX( data.x );
+    // movePlayer.setY( data.y );
+    // movePlayer.setDir( data.dir );
+    // movePlayer.setArmAngle( data.armAngle );
+    // movePlayer.setDeaths( data.deaths );
 };
 
 function onRemovePlayer( data ) {
@@ -213,19 +244,7 @@ function draw() {
     ctx.clearRect( 0, 0, canvas.width, canvas.height );
 
 
-    //deaths
-    ctx.save();
-    ctx.strokeStyle = localPlayer.getColor();
-    ctx.font = "20px serif";
-    ctx.strokeText( localPlayer.getDeaths(), 30, 25 );
-
-    for ( i in remotePlayers ) {
-        ctx.strokeStyle = remotePlayers[ i ].getColor();
-        ctx.strokeText( remotePlayers[ i ].getDeaths(), 30 + ( Number( i ) + 1 ) * 30, 25 );
-        //console.log(Number(i)+1);
-    }
-
-    ctx.restore();
+    
 
     ctx.save();
     cameraX = canvas.width / 2 - localPlayer.getX(); //Center on player
@@ -254,7 +273,37 @@ function draw() {
         remotePlayers[ i ].draw( ctx );
     };
     ctx.restore();
+
+    //death count
+    if (localPlayer.getUsername()){
+        ctx.save();
+        ctx.strokeStyle = localPlayer.getColor();
+        ctx.font = "20px serif";
+        ctx.strokeText( localPlayer.getDeaths(), 30, 25 );
+        ctx.strokeText( localPlayer.getUsername(), 30, 40);
+        var startSpot = 30;
+        startSpot += calcMaxLength(localPlayer)*10 + 5;
+
+        for ( i in remotePlayers ) {
+            ctx.strokeStyle = remotePlayers[ i ].getColor();
+            ctx.strokeText( remotePlayers[ i ].getDeaths(), startSpot, 25 );
+            ctx.strokeText( remotePlayers[i].getUsername(), startSpot, 40);
+            //console.log(remotePlayers[i].getUsername());
+            //console.log(remotePlayers[i].getDeaths());
+
+            startSpot += calcMaxLength(remotePlayers[i])*10 + 5;;
+            //console.log(Number(i)+1);
+        }
+
+        ctx.restore();
+    }
 };
+
+function calcMaxLength(player){
+    deathLength = player.getDeaths().toString().length;
+    nameLength = player.getUsername().toString().length;
+    return Math.max(deathLength, nameLength);
+}
 
 function playerById( id ) {
     var i;
